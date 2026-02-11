@@ -15,6 +15,8 @@ public class InputManager : MonoBehaviour
 
     private LayerMask placelayerMask;
 
+
+
     public Vector3 GetSelectedMapPosition()
     {
         Vector3 mousePos = Input.mousePosition; // registrar el input en el espacio 3D con el mouse
