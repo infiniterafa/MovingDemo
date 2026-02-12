@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using System;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
@@ -15,6 +17,19 @@ public class InputManager : MonoBehaviour
 
     private LayerMask placelayerMask;
 
+    public event Action OnClicked, OnExit;
+
+    private void Update()
+    {
+        //invocando action del boton derecho del mouse  
+        if(Input.GetMouseButtonDown(0))
+            OnClicked?.Invoke();
+        if(Input.GetKeyDown(KeyCode.Escape))
+            OnExit?.Invoke();
+    }
+
+    public bool IsPointerOverUI()
+         => EventSystem.current.IsPointerOverGameObject(); // ayuda a que no se puedan seleccionar objetos debajo de la UI
 
 
     public Vector3 GetSelectedMapPosition()

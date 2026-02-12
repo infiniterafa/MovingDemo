@@ -13,11 +13,19 @@ MonoBehaviour:
   m_Name: ObjectDatabase
   m_EditorClassIdentifier: Assembly-CSharp::ObjectDatabase
   objectsData:
+  - <Name>k__BackingField: Floor
+    <ID>k__BackingField: 0
+    <Size>k__BackingField: {x: 1, y: 1}
+    <Prefab>k__BackingField: {fileID: 7145532958943133093, guid: 2a7b2a03289bc7d4b8fb7486be5142f4, type: 3}
   - <Name>k__BackingField: Chair
     <ID>k__BackingField: 1
     <Size>k__BackingField: {x: 1, y: 1}
     <Prefab>k__BackingField: {fileID: 3280323537837791286, guid: daf78fe98c9abd74c9d1d9722669a8bf, type: 3}
-  - <Name>k__BackingField: Table
+  - <Name>k__BackingField: BigBed
     <ID>k__BackingField: 2
+    <Size>k__BackingField: {x: 2, y: 2}
+    <Prefab>k__BackingField: {fileID: 7154209994094961220, guid: ce31062a12a6e054e8b4f85eeb115223, type: 3}
+  - <Name>k__BackingField: Table
+    <ID>k__BackingField: 3
     <Size>k__BackingField: {x: 2, y: 2}
     <Prefab>k__BackingField: {fileID: 1208680457737967071, guid: 68abff289db417e429535176f6ab2acf, type: 3}
