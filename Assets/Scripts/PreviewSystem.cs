@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PreviewSystem : MonoBehaviour
@@ -11,5 +12,76 @@ public class PreviewSystem : MonoBehaviour
 
     [SerializeField]
     private GameObject previewGameObject;
-    private GameObject cellIndicator; 
+    private GameObject cellIndicator;
+
+    private Renderer cellIndicatorRenderer;
+
+    private void Start()
+    {
+        previewMaterialInstance = new Material(previewMaterialPrefab);
+        cellIndicator.SetActive(false);
+        cellIndicatorRenderer = cellIndicator.GetComponentInChildren<Renderer>();
+    }
+
+    public void StartShowPlacePreview(GameObject prefab, Vector2Int size) 
+    {
+        previewGameObject = Instantiate(prefab);
+        PreparePreview(previewGameObject);
+        PrepareCursor(size); 
+        cellIndicator.SetActive(true);
+    }
+
+    private void PrepareCursor(Vector2Int size) //toma el nuevo tamaño para la celda
+    {
+        if(size.x > 0 || size.y >0)
+        {
+            cellIndicator.transform.localScale = new Vector3(size.x, 1, size.y);
+            cellIndicatorRenderer.material.mainTextureScale = size; 
+        }
+    }
+
+    private void PreparePreview(GameObject previewGameObject) // cambia material
+    {
+        Renderer[] renderers = previewGameObject.GetComponentsInChildren<Renderer>();
+        foreach (Renderer renderer in renderers)
+        {
+            Material[] materials = renderer.materials;
+            for (int i = 0; i < materials.Length; i++)
+            {
+                materials[i] = previewMaterialInstance;
+            }
+            renderer.materials = materials; 
+        }
+    }
+
+    public void StopShowingPreviewPlacement()  //quita el objeto que se esta haciendo el preview
+    {
+        cellIndicator.SetActive(false);
+        Destroy(previewGameObject);
+    }
+
+    public void UpdatePosition(Vector3 position, bool validity)
+    {
+        MovePreview(position);
+        MoveCursor(position); 
+        ApplyFeedBAck(validity);
+    }
+    // cambiar el color, posicion y mouse de la preview
+    private void ApplyFeedBAck(bool validity)
+    {
+        Color c = validity ? Color.white : Color.red;
+        cellIndicatorRenderer.material.color = c;
+        c.a = 0.6f; 
+        previewMaterialInstance.color = c;
+    }
+
+    private void MoveCursor(Vector3 position)
+    {
+        cellIndicator.transform.position = position; 
+    }
+
+    private void MovePreview(Vector3 position)
+    {
+        previewGameObject.transform.position = new Vector3(position.x, position.y + previewYOffset, position.z);
+    }
 }
