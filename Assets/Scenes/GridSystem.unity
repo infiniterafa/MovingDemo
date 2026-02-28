@@ -914,7 +914,7 @@ MonoBehaviour:
   grid: {fileID: 1997736814}
   database: {fileID: 11400000, guid: 3ea39754b239f394b8d76209c3a7233f, type: 2}
   gridVisualization: {fileID: 414233468}
-  preview: {fileID: 0}
+  preview: {fileID: 1002542228}
 --- !u!1 &575034639
 GameObject:
   m_ObjectHideFlags: 0

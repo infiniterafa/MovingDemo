@@ -7,11 +7,11 @@ public class PreviewSystem : MonoBehaviour
     private float previewYOffset = 0.05f;
 
     [SerializeField]
-    Material previewMaterialPrefab;
-    Material previewMaterialInstance; 
+    private  Material previewMaterialPrefab;
+    private  Material previewMaterialInstance; 
 
     [SerializeField]
-    private GameObject previewGameObject;
+    private GameObject previewObject;
     private GameObject cellIndicator;
 
     private Renderer cellIndicatorRenderer;
@@ -25,8 +25,8 @@ public class PreviewSystem : MonoBehaviour
 
     public void StartShowPlacePreview(GameObject prefab, Vector2Int size) 
     {
-        previewGameObject = Instantiate(prefab);
-        PreparePreview(previewGameObject);
+        previewObject = Instantiate(prefab);
+        PreparePreview(previewObject);
         PrepareCursor(size); 
         cellIndicator.SetActive(true);
     }
@@ -54,10 +54,11 @@ public class PreviewSystem : MonoBehaviour
         }
     }
 
-    public void StopShowingPreviewPlacement()  //quita el objeto que se esta haciendo el preview
+    public void StopShowingPreview()  //quita el objeto que se esta haciendo el preview
     {
         cellIndicator.SetActive(false);
-        Destroy(previewGameObject);
+        if(previewObject!= null)
+            Destroy(previewObject);
     }
 
     public void UpdatePosition(Vector3 position, bool validity)
@@ -82,6 +83,6 @@ public class PreviewSystem : MonoBehaviour
 
     private void MovePreview(Vector3 position)
     {
-        previewGameObject.transform.position = new Vector3(position.x, position.y + previewYOffset, position.z);
+        previewObject.transform.position = new Vector3(position.x, position.y + previewYOffset, position.z);
     }
 }

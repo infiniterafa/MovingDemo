@@ -99,7 +99,7 @@ public class PlacementSystem : MonoBehaviour
                                                database.objectsData[selectObjectIndex].ID,
                                                placedGameObjects.Count - 1);//agregar a la grid data el nuevo objeto con su posicion, tamaño, id e indice
 
-        preview.UpdatePosition(grid.CellToWorld(gridPosition), true); //actualizar  posicion preview
+        preview.UpdatePosition(grid.CellToWorld(gridPosition), false); //actualizar  posicion preview
     }
 
     private bool CheckPlacementValidity(Vector3Int gridPosition, int selectObjectIndex)
@@ -115,7 +115,7 @@ public class PlacementSystem : MonoBehaviour
         selectObjectIndex = -1;
 
         gridVisualization.SetActive(false); //activa visualizacion
-        preview.StopShowingPreviewPlacement(); 
+        preview.StopShowingPreview(); 
 
         inputManager.OnClicked -= PlaceStructure;
         inputManager.OnExit -= StopPlacement;
@@ -128,12 +128,6 @@ public class PlacementSystem : MonoBehaviour
        
             return;
        
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            //rotar el objeto con la tecla R
-            m_Orientation = (GridOrientation)(((int)m_Orientation + 1) % Enum.GetNames(typeof(GridOrientation)).Length);
-        }
-
         //el mouse del juego como un objeto junto con su pos
         Vector3 mouseposition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mouseposition);
@@ -151,6 +145,12 @@ public class PlacementSystem : MonoBehaviour
             lastPosition = gridPosition;
         }
 
-       
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            //rotar el objeto con la tecla R
+            m_Orientation = (GridOrientation)(((int)m_Orientation + 1) % Enum.GetNames(typeof(GridOrientation)).Length);
+        }
+
+
     }
 }
