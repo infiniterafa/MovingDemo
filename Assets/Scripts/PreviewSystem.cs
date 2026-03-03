@@ -12,6 +12,7 @@ public class PreviewSystem : MonoBehaviour
 
     [SerializeField]
     private GameObject previewObject;
+    [SerializeField]
     private GameObject cellIndicator;
 
     private Renderer cellIndicatorRenderer;
@@ -20,7 +21,7 @@ public class PreviewSystem : MonoBehaviour
     {
         previewMaterialInstance = new Material(previewMaterialPrefab);
         cellIndicator.SetActive(false);
-        cellIndicatorRenderer = cellIndicator.GetComponentInChildren<Renderer>();
+        //cellIndicatorRenderer = cellIndicator.GetComponentInChildren<Renderer>();
     }
 
     public void StartShowPlacePreview(GameObject prefab, Vector2Int size) 
@@ -29,6 +30,7 @@ public class PreviewSystem : MonoBehaviour
         PreparePreview(previewObject);
         PrepareCursor(size); 
         cellIndicator.SetActive(true);
+        cellIndicatorRenderer = previewObject.GetComponentInChildren<Renderer>();
     }
 
     private void PrepareCursor(Vector2Int size) //toma el nuevo tamaño para la celda
@@ -36,7 +38,7 @@ public class PreviewSystem : MonoBehaviour
         if(size.x > 0 || size.y >0)
         {
             cellIndicator.transform.localScale = new Vector3(size.x, 1, size.y);
-            cellIndicatorRenderer.material.mainTextureScale = size; 
+            //cellIndicatorRenderer.sharedMaterial.mainTextureScale = size; 
         }
     }
 
@@ -71,7 +73,7 @@ public class PreviewSystem : MonoBehaviour
     private void ApplyFeedBAck(bool validity)
     {
         Color c = validity ? Color.white : Color.red;
-        cellIndicatorRenderer.material.color = c;
+        cellIndicatorRenderer.sharedMaterial.color = c;
         c.a = 0.6f; 
         previewMaterialInstance.color = c;
     }

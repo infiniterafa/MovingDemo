@@ -1539,7 +1539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PreviewSystem
   previewYOffset: 0.05
   previewMaterialPrefab: {fileID: 2100000, guid: 7b6c47ef30cde00478d2de64b4e04a6c, type: 2}
-  previewGameObject: {fileID: 49185547}
+  previewObject: {fileID: 49185547}
 --- !u!1 &1085398185
 GameObject:
   m_ObjectHideFlags: 0
