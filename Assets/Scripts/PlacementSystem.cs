@@ -35,6 +35,8 @@ public class PlacementSystem : MonoBehaviour
 
     private Vector3Int lastPosition = Vector3Int.zero;
 
+
+
     private void Start()
     {
         StopPlacement();

@@ -1540,6 +1540,7 @@ MonoBehaviour:
   previewYOffset: 0.05
   previewMaterialPrefab: {fileID: 2100000, guid: 7b6c47ef30cde00478d2de64b4e04a6c, type: 2}
   previewObject: {fileID: 49185547}
+  cellIndicator: {fileID: 446448218}
 --- !u!1 &1085398185
 GameObject:
   m_ObjectHideFlags: 0
