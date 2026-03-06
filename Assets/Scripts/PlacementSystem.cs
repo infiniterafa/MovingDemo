@@ -24,9 +24,10 @@ public class PlacementSystem : MonoBehaviour
 
     private GridData floorData, furnitureData;
 
+    [SerializeField]
+    private ObjectPlacer objectPlacer;  
 
 
-    private List<GameObject> placedGameObjects = new();
 
     GridOrientation m_Orientation;
 
@@ -86,20 +87,14 @@ public class PlacementSystem : MonoBehaviour
         if (placementValidity == false)
             return;
 
-        GameObject newObject = Instantiate(database.objectsData[selectObjectIndex].Prefab); //instancia objeto 
-
-        //convertir posiciones a la grid
-        newObject.transform.position = grid.CellToWorld(gridPosition);
-        newObject.transform.rotation = Quaternion.Euler(0, (int)m_Orientation * 90, 0); //rotar el objeto dependiendo de la orientacion
-
-        placedGameObjects.Add(newObject); //agregar a la lista de objetos que se colocaron
-
+        int index = objectPlacer.PlaceObject((database.objectsData[selectObjectIndex].Prefab), grid.CellToWorld(gridPosition), m_Orientation ); 
+  
         GridData selectedData = database.objectsData[selectObjectIndex].ID == 0 ?
            floorData : furnitureData;
 
         selectedData.AddObjectAt(gridPosition, database.objectsData[selectObjectIndex].Size,
                                                database.objectsData[selectObjectIndex].ID,
-                                               placedGameObjects.Count - 1);//agregar a la grid data el nuevo objeto con su posicion, tamaño, id e indice
+                                               index);//agregar a la grid data el nuevo objeto con su posicion, tamaño, id e indice
 
         preview.UpdatePosition(grid.CellToWorld(gridPosition), false); //actualizar  posicion preview
     }
