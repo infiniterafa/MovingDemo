@@ -6,8 +6,7 @@ using System.Collections.Generic;
 
 public class PlacementSystem : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject mouseIndicador;
+
 
     [SerializeField]
     private InputManager inputManager;
@@ -17,7 +16,7 @@ public class PlacementSystem : MonoBehaviour
 
     [SerializeField]
     private ObjectDatabase database;
-    private int selectObjectIndex = -1;
+
 
     [SerializeField]
     private GameObject gridVisualization;
@@ -25,18 +24,18 @@ public class PlacementSystem : MonoBehaviour
     private GridData floorData, furnitureData;
 
     [SerializeField]
-    private ObjectPlacer objectPlacer;  
+    private ObjectPlacer objectPlacer;
 
 
 
     GridOrientation m_Orientation;
 
     [SerializeField]
-    private PreviewSystem preview; 
+    private PreviewSystem preview;
 
     private Vector3Int lastPosition = Vector3Int.zero;
 
-
+    IBuildingState buildingState;
 
     private void Start()
     {
@@ -44,30 +43,35 @@ public class PlacementSystem : MonoBehaviour
         floorData = new GridData();
         furnitureData = new GridData();
 
-     
+
     }
 
     public void StartPlacement(int ID)
     {
 
         StopPlacement(); // para evitar que se puedan colocar objetos al mismo tiempo
-
-
-        selectObjectIndex = database.objectsData.FindIndex(data=> data.ID == ID); // como un for loop pero busca el indice del objeto que se va a colocar en la base de datos, con su ID
-       
-        if (selectObjectIndex < 0)
-        {
-            Debug.LogError($"No ID found {ID}"); // mensaje de no id 
-            return; 
-        }
-
         gridVisualization.SetActive(true); //activa visualizacion
-        preview.StartShowPlacePreview(database.objectsData[selectObjectIndex].Prefab, 
-                                      database.objectsData[selectObjectIndex].Size); //muestra el preview 
 
-        inputManager.OnClicked += PlaceStructure; 
+        buildingState = new PlacementState(ID,
+                                           grid,
+                                           preview,
+                                           database,
+                                           m_Orientation,
+                                           floorData,
+                                           furnitureData,
+                                           objectPlacer); //crea un nuevo estado de colocacion con el ID del objeto
+        inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
 
+    }
+
+    public void StartRemoving()
+    {
+        StopPlacement();
+        gridVisualization.SetActive(true);
+        buildingState = new RemovingState(grid, preview, m_Orientation, floorData, furnitureData, objectPlacer); //crea un nuevo estado de eliminacion
+        inputManager.OnClicked += PlaceStructure;
+        inputManager.OnExit += StopPlacement;
     }
 
     private void PlaceStructure()
@@ -82,65 +86,48 @@ public class PlacementSystem : MonoBehaviour
         Vector3 mouseposition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mouseposition);
 
-        bool placementValidity = CheckPlacementValidity(gridPosition, selectObjectIndex);
 
-        if (placementValidity == false)
-            return;
-
-        int index = objectPlacer.PlaceObject((database.objectsData[selectObjectIndex].Prefab), grid.CellToWorld(gridPosition), m_Orientation ); 
-  
-        GridData selectedData = database.objectsData[selectObjectIndex].ID == 0 ?
-           floorData : furnitureData;
-
-        selectedData.AddObjectAt(gridPosition, database.objectsData[selectObjectIndex].Size,
-                                               database.objectsData[selectObjectIndex].ID,
-                                               index);//agregar a la grid data el nuevo objeto con su posicion, tamaño, id e indice
-
-        preview.UpdatePosition(grid.CellToWorld(gridPosition), false); //actualizar  posicion preview
+        buildingState.OnAction(gridPosition); // colocar el objeto en la posicion de la grid
     }
 
-    private bool CheckPlacementValidity(Vector3Int gridPosition, int selectObjectIndex)
-    {
-        GridData selectedData = database.objectsData[selectObjectIndex].ID == 0 ?
-            floorData : furnitureData; // si el id es 0, se coloca en el piso y sino en los muebles
+    //private bool CheckPlacementValidity(Vector3Int gridPosition, int selectObjectIndex)
+    //{
+    //    GridData selectedData = database.objectsData[selectObjectIndex].ID == 0 ?
+    //        floorData : furnitureData; // si el id es 0, se coloca en el piso y sino en los muebles
 
-        return selectedData.CanPlaceObjectAt(gridPosition, database.objectsData[selectObjectIndex].Size); // chequeo de posiciones para colocar objetos para que no se pongan objetos encima de otros
-    }
+    //    return selectedData.CanPlaceObjectAt(gridPosition, database.objectsData[selectObjectIndex].Size); // chequeo de posiciones para colocar objetos para que no se pongan objetos encima de otros
+    //}
 
     private void StopPlacement()
     {
-        selectObjectIndex = -1;
+        if (buildingState == null)
+            return;
 
         gridVisualization.SetActive(false); //activa visualizacion
-        preview.StopShowingPreview(); 
+        buildingState.EndState();
 
         inputManager.OnClicked -= PlaceStructure;
         inputManager.OnExit -= StopPlacement;
         lastPosition = Vector3Int.zero;
+        buildingState = null;
     }
 
     private void Update()
     {
-        if(selectObjectIndex < 0)
-       
+        if (buildingState == null)
+
             return;
-       
+
         //el mouse del juego como un objeto junto con su pos
         Vector3 mouseposition = inputManager.GetSelectedMapPosition();
         Vector3Int gridPosition = grid.WorldToCell(mouseposition);
 
-        if (lastPosition != gridPosition)
-        {
-            //el mismo chequeo para el objeto 
-            bool placementValidity = CheckPlacementValidity(gridPosition, selectObjectIndex);
-
-            mouseIndicador.transform.position = mouseposition;
-            //convertir posiciones a la grid junto conla preview
-
-            preview.UpdatePosition(grid.CellToWorld(gridPosition), placementValidity);
+        //if (lastPosition != gridPosition)
+        //{
+            buildingState.UpdateState(gridPosition, m_Orientation); // actualizar el estado del objeto 
 
             lastPosition = gridPosition;
-        }
+        //}
 
         if (Input.GetKeyDown(KeyCode.R))
         {

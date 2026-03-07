@@ -22,4 +22,12 @@ public class ObjectPlacer : MonoBehaviour
 
         return placedGameObjects.Count - 1; //return indice del objeto 
     }
+
+    internal void RemoveObject(int gameObjectIndex)
+    {
+        if (placedGameObjects.Count <= gameObjectIndex)
+            return;
+        Destroy(placedGameObjects[gameObjectIndex]);
+        placedGameObjects[gameObjectIndex] = null; //eliminar el objeto de la lista, pero no eliminar la referencia del indice
+    }
 }
