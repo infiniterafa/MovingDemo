@@ -8,11 +8,16 @@ public class RemovingState : IBuildingState
     Grid grid;
     PreviewSystem previewSystem;
 
+    ScoreManager scoreManager;
+
     GridOrientation m_Orientation;
     
     GridData floorData;
     GridData furnitureData;
     ObjectPlacer objectPlacer;
+
+
+    public event System.Action OnRemovalEvent;
 
     public RemovingState(Grid grid,
                          PreviewSystem previewSystem,
@@ -33,14 +38,17 @@ public class RemovingState : IBuildingState
 
     public void EndState()
     {
+      
         previewSystem.StopShowingPreview();
     }
 
     public void OnAction(Vector3Int gridPosition)
     {
+        Debug.Log("Removing object at: " + gridPosition);
         GridData selectedData = null;
         if (furnitureData.CanPlaceObjectAt(gridPosition, Vector2Int.one) == false)
         {
+
             selectedData = furnitureData;
         }
         else if (floorData.CanPlaceObjectAt(gridPosition, Vector2Int.one) == false)
@@ -65,6 +73,7 @@ public class RemovingState : IBuildingState
         }
         Vector3 cellPosition = grid.CellToWorld(gridPosition);
         previewSystem.UpdatePosition(cellPosition, CheckIfSelectionIsValid(gridPosition));
+        OnRemovalEvent?.Invoke();
     }
 
     private bool CheckIfSelectionIsValid(Vector3Int gridPosition)
@@ -75,7 +84,10 @@ public class RemovingState : IBuildingState
 
     public void UpdateState(Vector3Int gridPosition, GridOrientation O)
     {
-       bool validity = CheckIfSelectionIsValid(gridPosition);
+        
+        bool validity = CheckIfSelectionIsValid(gridPosition);
         previewSystem.UpdatePosition(grid.CellToWorld(gridPosition), validity);
+
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using System;
+using UnityEngine.Events;
 
 public class PlacementState : IBuildingState
 {
@@ -10,12 +11,16 @@ public class PlacementState : IBuildingState
     int ID;
     Grid grid;
     PreviewSystem previewSystem;
+    ScoreManager scoreManager; 
 
     GridOrientation m_Orientation;
     ObjectDatabase database;
     GridData floorData;
     GridData furnitureData;
     ObjectPlacer objectPlacer;
+
+    public event System.Action OnPlacementEvent;
+    
 
     public PlacementState(int iD,
                           Grid grid,
@@ -49,11 +54,13 @@ public class PlacementState : IBuildingState
 
     public void EndState()
     {
+       
         previewSystem.StopShowingPreview();
     }
 
     public void OnAction(Vector3Int gridPosition)
     {
+        Debug.Log("Placing object at: " + gridPosition);
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
 
         if (placementValidity == false)
@@ -69,6 +76,7 @@ public class PlacementState : IBuildingState
                                                index);//agregar a la grid data el nuevo objeto con su posicion, tamaño, id e indice
 
         previewSystem.UpdatePosition(grid.CellToWorld(gridPosition), false); //actualizar  posicion preview
+        OnPlacementEvent?.Invoke(); //evento de colocar objeto
     }
 
 

@@ -60,6 +60,7 @@ public class PlacementSystem : MonoBehaviour
                                            floorData,
                                            furnitureData,
                                            objectPlacer); //crea un nuevo estado de colocacion con el ID del objeto
+        (buildingState as PlacementState).OnPlacementEvent += ScoreManager.FindAnyObjectByType<ScoreManager>().AddPoint; //evento de colocar objeto para sumar puntos
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
 
@@ -70,6 +71,7 @@ public class PlacementSystem : MonoBehaviour
         StopPlacement();
         gridVisualization.SetActive(true);
         buildingState = new RemovingState(grid, preview, m_Orientation, floorData, furnitureData, objectPlacer); //crea un nuevo estado de eliminacion
+        (buildingState as RemovingState).OnRemovalEvent += ScoreManager.FindAnyObjectByType<ScoreManager>().SubstractPoint; //evento de eliminar objeto para restar puntos
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
     }
