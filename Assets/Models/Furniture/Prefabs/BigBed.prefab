@@ -284,9 +284,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3899444857532206779}
+  - component: {fileID: 2779886878999896280}
   m_Layer: 0
   m_Name: BigBed
-  m_TagString: Untagged
+  m_TagString: Furniture
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -307,6 +308,27 @@ Transform:
   - {fileID: 909932464646600312}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2779886878999896280
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7154209994094961220}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6530089, y: 0.9654171, z: 1.8948226}
+  m_Center: {x: 1.0266867, y: 0.37685445, z: 0.81600976}
 --- !u!1 &8295412921554556570
 GameObject:
   m_ObjectHideFlags: 0
