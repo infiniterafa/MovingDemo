@@ -18,10 +18,9 @@ public class PlacementState : IBuildingState
     GridData floorData;
     GridData furnitureData;
     ObjectPlacer objectPlacer;
+    SoundFeedBack soundFeedBack;
 
     public event System.Action OnPlacementEvent;
-    
-
     public PlacementState(int iD,
                           Grid grid,
                           PreviewSystem previewSystem,
@@ -29,7 +28,8 @@ public class PlacementState : IBuildingState
                           GridOrientation orientation,
                           GridData floorData,
                           GridData furnitureData,
-                          ObjectPlacer objectPlacer)
+                          ObjectPlacer objectPlacer,
+                          SoundFeedBack soundFeedBack)
     {
         ID = iD;
         this.grid = grid;
@@ -39,6 +39,7 @@ public class PlacementState : IBuildingState
         this.floorData = floorData;
         this.furnitureData = furnitureData;
         this.objectPlacer = objectPlacer;
+        this.soundFeedBack = soundFeedBack;
 
         selectedObjectIndex = database.objectsData.FindIndex(data => data.ID == ID); // como un for loop pero busca el indice del objeto que se va a colocar en la base de datos, con su ID
 
@@ -49,7 +50,7 @@ public class PlacementState : IBuildingState
         }
         else
             throw new System.Exception($"No object found with ID {iD}");
-
+        this.soundFeedBack = soundFeedBack;
     }
 
     public void EndState()
@@ -64,8 +65,13 @@ public class PlacementState : IBuildingState
         bool placementValidity = CheckPlacementValidity(gridPosition, selectedObjectIndex);
 
         if (placementValidity == false)
+        {
+            soundFeedBack.PlaySound(SoundType.wrongPlacement);
             return;
 
+        }
+
+        soundFeedBack.PlaySound(SoundType.Place);
         int index = objectPlacer.PlaceObject((database.objectsData[selectedObjectIndex].Prefab), grid.CellToWorld(gridPosition), m_Orientation);
 
         GridData selectedData = database.objectsData[selectedObjectIndex].ID == 0 ?

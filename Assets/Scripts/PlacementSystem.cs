@@ -26,6 +26,9 @@ public class PlacementSystem : MonoBehaviour
     [SerializeField]
     private ObjectPlacer objectPlacer;
 
+    [SerializeField]
+    private SoundFeedBack soundFeedBack;
+
 
 
     GridOrientation m_Orientation;
@@ -59,7 +62,8 @@ public class PlacementSystem : MonoBehaviour
                                            m_Orientation,
                                            floorData,
                                            furnitureData,
-                                           objectPlacer); //crea un nuevo estado de colocacion con el ID del objeto
+                                           objectPlacer, 
+                                           soundFeedBack); //crea un nuevo estado de colocacion con el ID del objeto
         (buildingState as PlacementState).OnPlacementEvent += ScoreManager.FindAnyObjectByType<ScoreManager>().AddPoint; //evento de colocar objeto para sumar puntos
         inputManager.OnClicked += PlaceStructure;
         inputManager.OnExit += StopPlacement;
