@@ -27,6 +27,7 @@ public class PreviewSystem : MonoBehaviour
     public void StartShowPlacePreview(GameObject prefab, Vector2Int size)
     {
         previewObject = Instantiate(prefab);
+        previewObject.GetComponent<FurnitureBehaviour>().IsPlaceHolder(true);
         PreparePreview(previewObject);
         PrepareCursor(size);
         cellIndicator.SetActive(true);

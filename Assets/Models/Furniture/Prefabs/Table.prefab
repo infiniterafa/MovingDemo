@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4720969294680981103}
   - component: {fileID: 2657519988957650168}
+  - component: {fileID: -4109663402175315401}
   m_Layer: 0
   m_Name: Table
   m_TagString: Furniture
@@ -54,6 +55,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.8314265, y: 1.2507578, z: 1.7101072}
   m_Center: {x: 0.76858324, y: 0.6435661, z: 0.7196947}
+--- !u!114 &-4109663402175315401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208680457737967071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4d82a161aff9984c8271ebfa84f5bc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FurnitureBehaviour
 --- !u!1 &3195781470249818473
 GameObject:
   m_ObjectHideFlags: 0
